@@ -1,5 +1,5 @@
 
-![logo](images/HgtSIM_logo.jpg)
+![logo](images/HgtSIM.jpg)
 ---
 
 + HgtSIM: A simulator for horizontal gene transfer (HGT) in microbial communities
