@@ -1,11 +1,11 @@
 
 ![logo](images/HgtSIM_logo.jpg)
----
 
+
+Publication:
+---
 + Song WZ, Steensen K , Thomas T. (2017) HgtSIM: A simulator for horizontal gene transfer (HGT) in microbial communities. PeerJ.
-+ Last update: 2017-10-23
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
-+ Affiliation: The Centre for Marine Bio-Innovation (CMB), The University of New South Wales, Sydney, Australia
 
 Dependencies:
 ---
@@ -15,10 +15,10 @@ Dependencies:
 
 Change Log:
 ---
-+ support for draft genome
-+ support for dynamic flanking sequences
-+ support for the 'mixed' mode
-+ support for the 'keep_cds' option
++ (2017-09-16) support for draft genome
++ (2017-09-16) support for dynamic flanking sequences
++ (2017-09-16) support for the 'mixed' mode
++ (2017-09-16) support for the 'keep_cds' option
 
 Workflow:
 ---
