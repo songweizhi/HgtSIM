@@ -1,4 +1,5 @@
-HgtSIM
+
+![logo](images/HgtSIM_logo.jpg)
 ---
 
 + HgtSIM: Horizontal gene transfer (HGT) simulator
