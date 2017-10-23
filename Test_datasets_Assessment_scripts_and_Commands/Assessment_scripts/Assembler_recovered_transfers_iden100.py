@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2017, Weizhi Song, Torsten Thomas.
+# Copyright (C) 2017, Weizhi Song, Kerrin Steensen and Torsten Thomas.
 # songwz03@gmail.com and t.thomas@unsw.edu.au
 
 # HgtSIM is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
