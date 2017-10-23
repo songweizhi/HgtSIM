@@ -2,7 +2,7 @@
 ![logo](images/HgtSIM_logo.jpg)
 ---
 
-+ HgtSIM: A simulator for horizontal gene transfer (HGT) in microbial communities
++ Song WZ, Steensen K , Thomas T. (2017) HgtSIM: A simulator for horizontal gene transfer (HGT) in microbial communities. PeerJ.
 + Last update: 2017-10-23
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
 + Affiliation: The Centre for Marine Bio-Innovation (CMB), The University of New South Wales, Sydney, Australia
