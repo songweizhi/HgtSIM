@@ -2,9 +2,8 @@
 ![logo](images/HgtSIM_logo.jpg)
 ---
 
-+ HgtSIM: Horizontal gene transfer (HGT) simulator
-+ Version: 1.0
-+ Last update: 2017-09-18
++ HgtSIM: A simulator for horizontal gene transfer (HGT) in microbial communities
++ Last update: 2017-10-23
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
 + Affiliation: The Centre for Marine Bio-Innovation (CMB), The University of New South Wales, Sydney, Australia
 
@@ -16,17 +15,19 @@ Dependencies:
 
 Change Log:
 ---
-+ added support for draft genome
-+ added support for dynamic flanking sequences
-+ added the 'mixed' mode
-+ added the 'keep_cds' option
++ support for draft genome
++ support for dynamic flanking sequences
++ support for the 'mixed' mode
++ support for the 'keep_cds' option
 
 Workflow:
 ---
 ![workflow](images/HgtSIM_workflow.jpg)
 
-How to run:
+Help information:
 ---
+
+        # HgtSIM is implemented in python3, please use python3 instead of python
 
         python3 HgtSIM.py -h
 
@@ -127,4 +128,3 @@ Output files:
     1. on the top is the nc and aa identities between input and mutated sequences for each input gene.
     1. followed by a summary of changed nucleotide bases for each input gene.
 1. The insertion report file.
-
