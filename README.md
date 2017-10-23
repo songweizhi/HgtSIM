@@ -2,29 +2,29 @@
 ![logo](images/HgtSIM_logo.jpg)
 
 
-Publication:
+Publication
 ---
 + Song WZ, Steensen K , Thomas T. (2017) HgtSIM: A simulator for horizontal gene transfer (HGT) in microbial communities. PeerJ.
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
 
-Dependencies:
+Dependencies
 ---
 
 + [BioPython](https://github.com/biopython/biopython.github.io/)
 + [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 
-Change Log:
+Change Log
 ---
-+ (2017-09-16) support for draft genome
-+ (2017-09-16) support for dynamic flanking sequences
-+ (2017-09-16) support for the 'mixed' mode
-+ (2017-09-16) support for the 'keep_cds' option
++ (2017-09-16) added support for draft genome
++ (2017-09-16) added support for dynamic flanking sequences
++ (2017-09-16) added support for the 'mixed' mode
++ (2017-09-16) added support for the 'keep_cds' option
 
-Workflow:
+Workflow
 ---
 ![workflow](images/HgtSIM_workflow.jpg)
 
-Help information:
+Help information
 ---
 
         # HgtSIM is implemented in python3, please use python3 instead of python
@@ -52,7 +52,7 @@ Help information:
                       insertion
 
 
-Input files and arguments:
+Input files and arguments
 ---
 
 1. Sequences of genes to be transferred (in multi-fasta format)
@@ -118,7 +118,7 @@ HgtSIM will randomly select a value between user specified minimum and maximum m
 1. Transfers can be inserted only to the intergenic regions by specifying the 'keep_cds' option. The annotation files (in
 gbk format) of the recipient genomes are needed to enable this option.
 
-Output files:
+Output files
 ---
 
 1. Produced genomes with transferred genes, which were placed in folder 'Genomes_with_transfers'.
