@@ -1,0 +1,801 @@
+Sequence	Iden_nc	Iden_aa
+AAM_00175	100.0	100.0
+AAM_00176	100.0	100.0
+AAM_00195	100.0	100.0
+AAM_00209	100.0	100.0
+AAM_00308	100.0	100.0
+AAM_00473	100.0	100.0
+AAM_00571	100.0	100.0
+AAM_00702	100.0	100.0
+AAM_00862	100.0	100.0
+AAM_03063	100.0	100.0
+AKV_00282	100.0	100.0
+AKV_00288	100.0	100.0
+AKV_00359	100.0	100.0
+AKV_00943	100.0	100.0
+AKV_01007	100.0	100.0
+AKV_01272	100.0	100.0
+AKV_01273	100.0	100.0
+AKV_01812	100.0	100.0
+AKV_02353	100.0	100.0
+AKV_02380	100.0	100.0
+AMAC_00215	100.0	100.0
+AMAC_00418	100.0	100.0
+AMAC_00685	100.0	100.0
+AMAC_00998	100.0	100.0
+AMAC_01196	100.0	100.0
+AMAC_01576	100.0	100.0
+AMAC_01674	100.0	100.0
+AMAC_02518	100.0	100.0
+AMAC_02914	100.0	100.0
+AMAC_03303	100.0	100.0
+AMAU_00617	100.0	100.0
+AMAU_00830	100.0	100.0
+AMAU_01212	100.0	100.0
+AMAU_01255	100.0	100.0
+AMAU_02085	100.0	100.0
+AMAU_02414	100.0	100.0
+AMAU_02488	100.0	100.0
+AMAU_02632	100.0	100.0
+AMAU_04187	100.0	100.0
+AMAU_05963	100.0	100.0
+AMS_00102	100.0	100.0
+AMS_00937	100.0	100.0
+AMS_01465	100.0	100.0
+AMS_01655	100.0	100.0
+AMS_01716	100.0	100.0
+AMS_01785	100.0	100.0
+AMS_02653	100.0	100.0
+AMS_02811	100.0	100.0
+AMS_03303	100.0	100.0
+AMS_03378	100.0	100.0
+ARL_00442	100.0	100.0
+ARL_00629	100.0	100.0
+ARL_00634	100.0	100.0
+ARL_01008	100.0	100.0
+ARL_01194	100.0	100.0
+ARL_01226	100.0	100.0
+ARL_02642	100.0	100.0
+ARL_03240	100.0	100.0
+ARL_03413	100.0	100.0
+ARL_03996	100.0	100.0
+ARS_00175	100.0	100.0
+ARS_00690	100.0	100.0
+ARS_00911	100.0	100.0
+ARS_00958	100.0	100.0
+ARS_01255	100.0	100.0
+ARS_02444	100.0	100.0
+ARS_02511	100.0	100.0
+ARS_02706	100.0	100.0
+ARS_03086	100.0	100.0
+ARS_03177	100.0	100.0
+ASJ_00103	100.0	100.0
+ASJ_00197	100.0	100.0
+ASJ_00320	100.0	100.0
+ASJ_00412	100.0	100.0
+ASJ_00902	100.0	100.0
+ASJ_01197	100.0	100.0
+ASJ_01392	100.0	100.0
+ASJ_01651	100.0	100.0
+ASJ_02645	100.0	100.0
+ASJ_03214	100.0	100.0
+ASN_00060	100.0	100.0
+ASN_01773	100.0	100.0
+ASN_02198	100.0	100.0
+ASN_02864	100.0	100.0
+ASN_02939	100.0	100.0
+ASN_03136	100.0	100.0
+ASN_03327	100.0	100.0
+ASN_03987	100.0	100.0
+ASN_04073	100.0	100.0
+ASN_04445	100.0	100.0
+ATM_00526	100.0	100.0
+ATM_00724	100.0	100.0
+ATM_00976	100.0	100.0
+ATM_01561	100.0	100.0
+ATM_02037	100.0	100.0
+ATM_02182	100.0	100.0
+ATM_02773	100.0	100.0
+ATM_03442	100.0	100.0
+ATM_03491	100.0	100.0
+ATM_03557	100.0	100.0
+
+
+AAM_00175:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00176:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00195:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00209:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00308:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00473:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00571:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00702:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_00862:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AAM_03063:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_00282:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_00288:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_00359:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_00943:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_01007:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_01272:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_01273:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_01812:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_02353:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AKV_02380:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_00215:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_00418:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_00685:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_00998:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_01196:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_01576:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_01674:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_02518:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_02914:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAC_03303:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_00617:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_00830:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_01212:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_01255:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_02085:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_02414:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_02488:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_02632:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_04187:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMAU_05963:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_00102:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_00937:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_01465:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_01655:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_01716:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_01785:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_02653:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_02811:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_03303:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+AMS_03378:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_00442:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_00629:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_00634:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_01008:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_01194:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_01226:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_02642:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_03240:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_03413:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARL_03996:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_00175:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_00690:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_00911:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_00958:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_01255:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_02444:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_02511:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_02706:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_03086:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ARS_03177:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_00103:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_00197:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_00320:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_00412:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_00902:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_01197:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_01392:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_01651:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_02645:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASJ_03214:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_00060:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_01773:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_02198:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_02864:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_02939:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_03136:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_03327:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_03987:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_04073:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ASN_04445:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_00526:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_00724:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_00976:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_01561:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_02037:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_02182:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_02773:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_03442:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_03491:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
+
+
+ATM_03557:
+One point mutation (same-sense):	0
+One point mutation (non-same-sense):	0
+Two points mutation:	0
+Three points mutation:	0
