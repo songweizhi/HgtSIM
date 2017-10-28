@@ -15,6 +15,9 @@ Dependencies
 
 Change Log
 ---
++ To-do list:
+    1. combine the '-mixed', '-mini' and '-maxi' options as '-mixed mini-maxi' (e.g. -mixed 10-20).
+
 + 2017-09-16:
     1. added support for draft genome
     1. added support for dynamic flanking sequences
