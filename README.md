@@ -70,7 +70,7 @@ HgtSIM will randomly select a value between user specified minimum and maximum m
         # with 'mixed' mode (e.g. 5-25%)
         python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -mixed -mini 5 -maxi 25
 
-1. The ratio of mutation categories (separated with dash). The default setting is '1-0-1-1'. Please refer to the manuscript (http://dx.doi.org/10.7717/peerj.4015) or the figure below for its setting.
+1. The ratio of mutation categories (separated with dash). The default setting is '1-0-1-1'. Please refer to the publication (http://dx.doi.org/10.7717/peerj.4015) or the figure below for its setting.
 
     ![ratio_selection](images/ratio_selection.jpg)
 
