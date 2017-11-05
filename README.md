@@ -19,10 +19,10 @@ Change Log
     1. combine the '-mixed', '-mini' and '-maxi' options as '-mixed mini-maxi' (e.g. -mixed 10-20).
 
 + 2017-09-16:
-    1. added support for draft genome
-    1. added support for dynamic flanking sequences
-    1. added support for the 'mixed' mode
-    1. added support for the 'keep_cds' option
+    1. added support for draft genome.
+    1. added support for dynamic flanking sequences.
+    1. added support for the 'mixed' mode.
+    1. added support for the 'keep_cds' option.
 
 Workflow
 ---
@@ -31,7 +31,7 @@ Workflow
 Help information
 ---
 
-        # HgtSIM is implemented in python3, please use python3 instead of python
+        # HgtSIM is implemented in python3, please use python3 instead of python.
 
         python3 HgtSIM.py -h
 
@@ -59,22 +59,21 @@ Help information
 Input files and arguments
 ---
 
-1. Sequences of genes to be transferred (in multi-fasta format)
-1. A folder holds all recipient genomes
-1. The mutation level of genes to be transferred. This can be specified either as a fixed value, or a range of values (the 'mixed' mode). If the 'mixed' argument was provided,
-HgtSIM will randomly select a value between user specified minimum and maximum mutation levels to alter the query genes.
+1. Sequences of genes to be transferred (in multi-fasta format).
+1. A folder holds all recipient genomes, one file per genome.
+1. The mutation level of genes to be transferred. This can be specified either as a fixed value, or within a range (the 'mixed' mode). If the 'mixed' argument was provided,
+HgtSIM will randomly select a value between user specified minimum and maximum mutation levels to alter each gene transfer.
 
-        # with fixed mutation level
+        # with fixed mutation level (e.g. 10%).
         python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -i 10
 
-        # with 'mixed' mode
+        # with 'mixed' mode (e.g. 5-25%)
         python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -mixed -mini 5 -maxi 25
 
-
-1. The ratio of mutation categories (separated with dash). The default setting is '1-0-1-1'. Please refer to the manuscript (or the figure below) for how to set it.
+1. The ratio of mutation categories (separated with dash). The default setting is '1-0-1-1'. Please refer to the manuscript (http://dx.doi.org/10.7717/peerj.4015) or the figure below for its setting.
 ![ratio_selection](images/ratio_selection.jpg)
-        The correlation of mutation on the nucleotide level and the resulting aa changes under different mutation category ratios
-1. The distribution of transfers to the recipient genomes. The first column refers to the recipient genomes(no extension), followed by a list of genes to be transferred into it (separated with comma).
+
+1. The distribution of transfers to the recipient genomes. The first column refers to the recipient genomes(without file extension), followed by a list of genes to be transferred therein (separated with comma).
 
         BAD,AAM_03063,AKV_01007,AMAC_01196,AMAU_02632,AMS_01785
         BDS,AAM_00175,AKV_00943,AMAC_00215,AMAU_02085,AMS_01465
@@ -83,21 +82,21 @@ HgtSIM will randomly select a value between user specified minimum and maximum m
         BNM,AAM_00209,AKV_00282,AMAC_02914,AMAU_02414,AMS_03378
         BRT,AAM_00308,AKV_02353,AMAC_03303,AMAU_00830,AMS_01655
 
-1. The flanking sequences to be added to the end of genes to be transferred. Can be specified with '-lf' and '-rf', the default value is None.
+1. The flanking sequences to be added to the end of gene transfers. Can be specified with '-lf' and '-rf', the default value is None.
 
-        # transfers without flanking sequences
+        # introduce gene transfers without adding flanking sequences
         python3 HgtSIM.py -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna
 
-        # or, add same pair of flanking sequences (e.g. 'TAGATGAGTGATTAGTTAGTTA') to all transfers
+        # or, add same pair of flanking sequences (e.g. 'TAGATGAGTGATTAGTTAGTTA') to all gene transfers
         python3 HgtSIM.py -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -lf TAGATGAGTGATTAGTTAGTTA -rf TAGATGAGTGATTAGTTAGTTA
 
-        # or, add flanking sequences dynamically to the two ends of each transfer
+        # or, add flanking sequences dynamically to the two ends of each gene transfer
         python3 HgtSIM.py -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -lf lf.fasta -rf rf.fasta
 
-    if you want to add flanking sequences dynamically to your transfers, you can specify the left and right side sequences separately in two multi-fasta files.
-    The IDs of the flanking sequences need to be exactly the same to the corresponding transfers to be added.
+    if you want to add flanking sequences dynamically to the gene transfers, you can specify the left and right side sequences in two multi-fasta files.
+    The IDs of the flanking sequences need to be exactly the same to their corresponding gene transfers.
 
-    As an illustration, if you have four transfers, which are transfer_A, transfer_B, transfer_C and transfer_D. And you have provided the following two files to HgtSIM:
+    As an illustration, if you have four transfers, which are transfer_A, transfer_B, transfer_C and transfer_D. And you have provided the following two files:
 
     lf.fasta
 
@@ -120,7 +119,7 @@ HgtSIM will randomly select a value between user specified minimum and maximum m
     4. add nothing to boths end of transfer_D.
 
 1. Transfers can be inserted only to the intergenic regions by specifying the 'keep_cds' option. The annotation files (in
-gbk format) of the recipient genomes are needed to enable this option.
+genbank format) of the recipient genomes are needed to enable this option.
 
 Output files
 ---
