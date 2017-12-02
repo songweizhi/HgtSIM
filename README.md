@@ -6,6 +6,7 @@ Publication
 ---
 + Song W, Steensen K, Thomas T. (2017) HgtSIM: a simulator for horizontal gene transfer (HGT) in microbial communities. PeerJ 5:e4015 https://doi.org/10.7717/peerj.4015
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
++ Affiliation: The Centre for Marine Bio-Innovation (CMB), The University of New South Wales, Sydney, Australia
 
 Dependencies
 ---
