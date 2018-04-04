@@ -19,8 +19,8 @@ import os
 import random
 import shutil
 import argparse
-from sys import stdout
 from time import sleep
+from datetime import datetime
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
@@ -116,7 +116,6 @@ def get_random_insertion(keep_cds, recipient_sequence, insert_sequence_list, ins
         length_list = list(range(1, ctg_length))
         random_bases = random.sample(length_list, insert_gene_number)
         random_intergenics_sorted = sorted(random_bases)
-
     elif keep_cds == 1:
         # randomly select intergenic
         random_selected_intergenics = random.sample(recipient_ctg_intergenic_list, insert_gene_number)
@@ -132,49 +131,54 @@ def get_random_insertion(keep_cds, recipient_sequence, insert_sequence_list, ins
 
     # get the start and stop points of all sub_sequences
     sub_sequences_list = []
-    n = 0
-    first_sequence = [1, random_intergenics_sorted[n]]
-    first_sequence_nc = recipient_sequence[0:random_intergenics_sorted[n]]
-    sub_sequences_list.append(first_sequence)
-    while n < insert_gene_number - 1:
-        current_sequence = [random_intergenics_sorted[n] + 1, random_intergenics_sorted[n+1]]
-        sub_sequences_list.append(current_sequence)
-        n += 1
-    last_sequence = [random_intergenics_sorted[n] + 1, ctg_length]
-    sub_sequences_list.append(last_sequence)
 
-    # get new sequences
     new_seq = ''
     for_report = []
-    m = 0
-    while m <= insert_gene_number:
-        if m < insert_gene_number:
-            for_report.append('%s\t%s\t%s\t%s' % (recipient_genome_id, recipient_ctg_id, random_intergenics_sorted[m], insert_sequence_id_list[m]))
+    if random_intergenics_sorted == []:
+        new_seq = recipient_sequence
+        for_report = ['%s\t%s\t%s\t%s' % (recipient_genome_id, recipient_ctg_id, 'None', 'None')]
+    else:
+        n = 0
+        first_sequence = [1, random_intergenics_sorted[n]]
+        first_sequence_nc = recipient_sequence[0:random_intergenics_sorted[n]]
+        sub_sequences_list.append(first_sequence)
+        while n < insert_gene_number - 1:
+            current_sequence = [random_intergenics_sorted[n] + 1, random_intergenics_sorted[n+1]]
+            sub_sequences_list.append(current_sequence)
+            n += 1
+        last_sequence = [random_intergenics_sorted[n] + 1, ctg_length]
+        sub_sequences_list.append(last_sequence)
 
-        if m == 0:
-            new_seq = first_sequence_nc
-        if m > 0:
-            current_subsequence_start = sub_sequences_list[m][0] - 1
-            current_subsequence_stop = sub_sequences_list[m][1]
-            current_subsequence = recipient_sequence[current_subsequence_start:current_subsequence_stop]
-            current_insert = insert_sequence_list[m - 1]
-            current_insert_id = insert_sequence_id_list[m - 1]
-            # add flanking sequences
-            current_insert_with_stop = ''
-            if dynamic_flanking_seqs == False:
-                current_insert_with_stop = '%s%s%s' % (common_stop_sequence_l, current_insert, common_stop_sequence_r)
-            if dynamic_flanking_seqs == True:
-                common_stop_sequence_l = ''
-                common_stop_sequence_r = ''
-                if current_insert_id in lf_dict:
-                    common_stop_sequence_l = lf_dict[current_insert_id]
-                if current_insert_id in rf_dict:
-                    common_stop_sequence_r = rf_dict[current_insert_id]
-                current_insert_with_stop = '%s%s%s' % (common_stop_sequence_l, current_insert, common_stop_sequence_r)
+        # get new sequences
+        m = 0
+        while m <= insert_gene_number:
+            if m < insert_gene_number:
+                for_report.append('%s\t%s\t%s\t%s' % (recipient_genome_id, recipient_ctg_id, random_intergenics_sorted[m], insert_sequence_id_list[m]))
 
-            new_seq += current_insert_with_stop
-            new_seq += current_subsequence
-        m += 1
+            if m == 0:
+                new_seq = first_sequence_nc
+            if m > 0:
+                current_subsequence_start = sub_sequences_list[m][0] - 1
+                current_subsequence_stop = sub_sequences_list[m][1]
+                current_subsequence = recipient_sequence[current_subsequence_start:current_subsequence_stop]
+                current_insert = insert_sequence_list[m - 1]
+                current_insert_id = insert_sequence_id_list[m - 1]
+                # add flanking sequences
+                current_insert_with_stop = ''
+                if dynamic_flanking_seqs == False:
+                    current_insert_with_stop = '%s%s%s' % (common_stop_sequence_l, current_insert, common_stop_sequence_r)
+                if dynamic_flanking_seqs == True:
+                    common_stop_sequence_l = ''
+                    common_stop_sequence_r = ''
+                    if current_insert_id in lf_dict:
+                        common_stop_sequence_l = lf_dict[current_insert_id]
+                    if current_insert_id in rf_dict:
+                        common_stop_sequence_r = rf_dict[current_insert_id]
+                    current_insert_with_stop = '%s%s%s' % (common_stop_sequence_l, current_insert, common_stop_sequence_r)
+
+                new_seq += current_insert_with_stop
+                new_seq += current_subsequence
+            m += 1
 
     return new_seq, for_report
 
@@ -330,7 +334,6 @@ for each_codon in standard_table.forward_table:
 # get codon_to_aa_dict
 codon_to_aa_dict = standard_table.forward_table
 
-print('Running random mutation...')
 for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
 
     # get mutation identity for each sequence to be transferred
@@ -343,7 +346,7 @@ for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
 
     input_seq = str(each_seq.seq)
     seq_length = len(input_seq)
-    stdout.write('\rProcessing: %s' % (each_seq.id))
+    print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random mutation: %s' % (each_seq.id))
     sleep(0.05)
     all_sequence_id_list.append(each_seq.id)
     sequence_length_dict_nc[each_seq.id] = seq_length
@@ -481,11 +484,11 @@ output_handle.close()
 output_aa_handle.close()
 simulate_report.close()
 
-print('\nMutants of input sequences exported to: %s' % output_seq_file)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutants of input sequences exported to: %s' % output_seq_file)
 sleep(1)
 
 # run blastn between input and mutant sequences
-print('Get nucleotide identity (by BlastN) between input sequences and their mutants')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating nucleotide identity (by BlastN) between input sequences and their mutants')
 blast_parameters_outfmt = ' -evalue 1e-5 -task blastn'
 blast_parameters_outfmt_6 = ' -evalue 1e-5 -outfmt 6 -task blastn'
 command_blast = 'blastn -query %s -subject %s -out %s%s' % (input_seq_file, output_seq_file, output_blast, blast_parameters_outfmt_6)
@@ -493,7 +496,7 @@ os.system(command_blast)
 
 # run blastp between input and mutant sequences
 sleep(1)
-print('Get amino acids identity (by BlastP) between input sequences and their mutants')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating amino acids identity (by BlastP) between input sequences and their mutants')
 blast_parameters_outfmt_aa = ' -evalue 1e-5 -task blastp'
 blast_parameters_outfmt_6_aa = ' -evalue 1e-5 -outfmt 6 -task blastp'
 command_blast_aa = 'blastp -query %s -subject %s -out %s%s' % (input_aa_seq_file, output_aa_seq_file, output_blast_aa, blast_parameters_outfmt_6_aa)
@@ -542,7 +545,7 @@ for each in all_sequence_id_list:
 overall_blast_results_handle.close()
 os.system('cat %s %s > %s' % (overall_blast_results,simulate_report_file_temp, simulate_report_file))
 
-print('Random mutation report exported to: %s' % simulate_report_file)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random mutation report exported to: %s' % simulate_report_file)
 sleep(1)
 
 
@@ -557,10 +560,10 @@ if dynamic_flanking_seqs == True:
     lf_dict, rf_dict = get_flanking_seqs_dict(common_stop_sequence_l, common_stop_sequence_r)
 
 
-print('dynamic_flanking_seqs: %s' % dynamic_flanking_seqs)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Dynamic_flanking_seqs: %s' % dynamic_flanking_seqs)
 
 # read insert sequences into a list
-print('Running random insertion...')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random insertion...')
 pwd_sequences_file = output_seq_file
 transfers = open(pwd_transfers)
 insertion_report_handle = open(insertion_report_file, 'w')
@@ -592,17 +595,14 @@ for each in transfers:
     transfer_num_to_each_contig_corrected.append(total_num_of_seq_to_be_transferred - sum(transfer_num_to_each_contig[:-1]))
 
     # read insert sequences into list
-    combined_ffn_handle = SeqIO.parse(pwd_sequences_file, 'fasta')
     insert_sequence_id_list = []
     insert_sequence_seq_list = []
-    for each_gene in combined_ffn_handle:
+    for each_gene in SeqIO.parse(pwd_sequences_file, 'fasta'):
         if each_gene.id in insert_sequence_id_list_unorder:
             insert_sequence_id_list.append(each_gene.id)
             insert_sequence_seq_list.append(str(each_gene.seq))
-
     # disorder the insert_sequence_id_list and insert_sequence_seq_list
     insert_sequence_id_list_new, insert_sequence_seq_list_new = disorder_2_mapped_list(insert_sequence_id_list, insert_sequence_seq_list)
-
 
     # get the id and seq of sequences to be transferred to each contig
     list_of_id_list = []
@@ -677,17 +677,17 @@ insertion_report_handle.close()
 
 
 sleep(1)
-print('Recombinants of recipient genomes exported to: %s' % pwd_output_folder)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Recombinants of recipient genomes exported to: %s' % pwd_output_folder)
 sleep(1)
-print('Random insertion report exported to: %s' % insertion_report_file)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random insertion report exported to: %s' % insertion_report_file)
 sleep(1)
 
 # delete temporary files
-print('Removing temporary files...')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Removing temporary files')
 os.remove(output_blast)
 os.remove(output_blast_aa)
 os.remove(overall_blast_results)
 os.remove(simulate_report_file_temp)
 
 sleep(1)
-print('All done!')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' All done, thanks for using HgtSIM!')
