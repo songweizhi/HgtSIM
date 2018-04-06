@@ -555,6 +555,7 @@ for each in all_sequence_id_list:
 overall_blast_results_handle.close()
 os.system('cat %s %s > %s' % (overall_blast_results,simulate_report_file_temp, simulate_report_file))
 
+
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutation report exported to file: %s' % simulate_report_file_name)
 sleep(0.5)
 
