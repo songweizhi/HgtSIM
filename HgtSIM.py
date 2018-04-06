@@ -358,8 +358,6 @@ for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
 
     input_seq = str(each_seq.seq)
     seq_length = len(input_seq)
-    #print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random mutation: %s' % (each_seq.id))
-    sleep(0.05)
     all_sequence_id_list.append(each_seq.id)
     sequence_length_dict_nc[each_seq.id] = seq_length
     sequence_length_dict_aa[each_seq.id + '_aa'] = int(seq_length/3 - 1)
@@ -687,7 +685,6 @@ for each in transfers:
         m += 1
     new_seq_file_handle.close()
 insertion_report_handle.close()
-
 
 sleep(0.5)
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Recombinants exported to folder: %s' % output_folder_name)

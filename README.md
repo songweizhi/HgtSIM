@@ -126,6 +126,6 @@ Output files
 1. The amino acid sequences of input genes to be transferred.
 1. The nucleotide and amino acid sequences of mutated input genes.
 1. The mutation report file, which includes two parts:
-    1. on the top is the nc and aa identities between input and mutated sequences for each input gene.
-    1. followed by a summary of changed nucleotide bases for each input gene.
+    1. on the top is the nc and aa identities between input and mutated sequences for each transfer.
+    1. followed by a summary of changed nucleotide bases for each transfer.
 1. The insertion report file.
