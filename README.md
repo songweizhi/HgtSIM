@@ -129,4 +129,3 @@ Output files
     1. on the top is the nc and aa identities between input and mutated sequences for each input gene.
     1. followed by a summary of changed nucleotide bases for each input gene.
 1. The insertion report file.
-
