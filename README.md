@@ -16,9 +16,8 @@ Dependencies
 
 Change Log
 ---
-+ To-do list:
-    1. combine the '-mixed', '-mini' and '-maxi' options as '-mixed mini-maxi'.
-
++ 2018-04-06:
+    1. combined the '-mixed', '-mini' and '-maxi' options to '-mixed min-max'.
 + 2017-09-16:
     1. added support for draft genome.
     1. added support for dynamic flanking sequences.
@@ -45,10 +44,7 @@ Help information
           -x          file extension of recipient genomes
           -lf         left end flanking sequences
           -rf         right end flanking sequences
-          -mixed      randomly assign mutation levels to query genes
-          -mini       minimum mutation level, with "mixed" specified
-          -maxi       maximum mutation level, must be smaller than 33, with "mixed"
-                      specified
+          -mixed      randomly assign mutation levels between specified values, parameter format: min-max
           -keep_cds   insert transfers only to non-coding regions, need the annotation
                       files (in gbk format) of recipient genomes
           -a          folder holds the annotation files (in gbk format) of recipient
@@ -69,7 +65,7 @@ HgtSIM will randomly select a value between user specified minimum and maximum m
         python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -i 10
 
         # with 'mixed' mode (e.g. 5-25%)
-        python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -mixed -mini 5 -maxi 25
+        python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -mixed 5-25
 
 1. The ratio of mutation categories (separated with dash). The default setting is '1-0-1-1'. Please refer to the publication (http://dx.doi.org/10.7717/peerj.4015) or the figure below for its setting.
 

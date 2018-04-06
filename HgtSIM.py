@@ -225,21 +225,9 @@ parser.add_argument('-rf',
                     help='right end flanking sequences')
 
 parser.add_argument('-mixed',
-                    action="store_true",
                     required=False,
-                    help='randomly assign mutation levels to query genes')
-
-parser.add_argument('-mini',
-                    required=False,
-                    type=int,
-                    default=0,
-                    help='minimum mutation level, with "mixed" specified')
-
-parser.add_argument('-maxi',
-                    required=False,
-                    type=int,
-                    default=25,
-                    help='maximum mutation level, must be smaller than 33, with "mixed" specified')
+                    default=None,
+                    help='randomly assign mutation levels between specified values, parameter format: min-max')
 
 parser.add_argument('-keep_cds',
                     action="store_true",
@@ -265,12 +253,24 @@ recipients_genome_extension = args['x']
 common_stop_sequence_l = args['lf']
 common_stop_sequence_r = args['rf']
 recipients_folder = args['f']
-mixed_mode = int(args['mixed'])
-min_iden = int(args['mini'])
-max_iden = int(args['maxi'])
 keep_cds = int(args['keep_cds'])
 recipients_gbk_folder = args['a']
 minimum_intergene_length = int(args['l'])
+mixed_mode = args['mixed']
+
+min_iden = None
+max_iden = None
+if mixed_mode == None:
+    print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mixed mode set to False')
+else:
+    mixed_mode_test_split = mixed_mode.split('-')
+    if len(mixed_mode_test_split) != 2:
+        print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Please check the parameter format for argument "mixed", e.g.: 5-25')
+        exit()
+    else:
+        min_iden = float(mixed_mode_test_split[0])
+        max_iden = float(mixed_mode_test_split[1])
+        print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mixed mode set to True, minimum mutation level: %s, maximum mutation level: %s' % (min_iden, max_iden))
 
 if recipients_folder[-1] == '/':
     recipients_folder = recipients_folder[:-1]
@@ -283,24 +283,34 @@ if (keep_cds == 1) and (recipients_gbk_folder[-1] == '/'):
 wd = os.getcwd()
 
 output_folder = ''
-if mixed_mode == 0:
-    output_folder =         '%s/outputs_%s_%s'                      % (wd, mutation_level, ratio)
-if mixed_mode == 1:
-    output_folder =         '%s/outputs_min%s-max%s_%s'             % (wd, min_iden, max_iden, ratio)
+if mixed_mode == None:
+    output_folder = '%s/outputs_%s_%s'          % (wd, mutation_level, ratio)
+else:
+    output_folder = '%s/outputs_min%s-max%s_%s' % (wd, min_iden, max_iden, ratio)
 
-input_seq_file =            '%s/%s'                                 % (wd, input_seq_file_name)
-input_aa_seq_file =         '%s/input_sequence_aa.fasta'            % output_folder
-output_seq_file =           '%s/input_sequence_mutant_nc.fasta'     % output_folder
-output_aa_seq_file =        '%s/input_sequence_mutant_aa.fasta'     % output_folder
-output_blast =              '%s/blast_results_nc.txt'               % output_folder
-output_blast_aa =           '%s/blast_results_aa.txt'               % output_folder
-simulate_report_file_temp = '%s/Step_1_mutation_report_temp.txt'    % output_folder
-simulate_report_file =      '%s/Step_1_mutation_report.txt'         % output_folder
-pwd_transfers =             '%s/%s'                                 % (wd, transfer_profile_file)
-pwd_recipients_folder =     '%s/%s'                                 % (wd, recipients_folder)
-pwd_recipients_gbk_folder = '%s/%s'                                 % (wd, recipients_gbk_folder)
-pwd_output_folder =         '%s/Genomes_with_transfers'             % output_folder
-insertion_report_file =     '%s/Step_2_insertion_report.txt'        % output_folder
+output_seq_file_name =                  'input_sequence_mutant_nc.fasta'
+output_aa_seq_file_name =               'input_sequence_mutant_aa.fasta'
+simulate_report_file_name =             'Step_1_mutation_report.txt'
+output_folder_name =                    'Genomes_with_transfers'
+insertion_report_file_name =            'Step_2_insertion_report.txt'
+input_aa_seq_file_name =                'input_sequence_aa.fasta'
+output_blast_file_name =                'blast_results_nc.txt'
+output_blast_aa_file_name =             'blast_results_aa.txt'
+simulate_report_file_temp_file_name =   'Step_1_mutation_report_temp.txt'
+
+input_seq_file =            '%s/%s' % (wd, input_seq_file_name)
+pwd_transfers =             '%s/%s' % (wd, transfer_profile_file)
+pwd_recipients_folder =     '%s/%s' % (wd, recipients_folder)
+pwd_recipients_gbk_folder = '%s/%s' % (wd, recipients_gbk_folder)
+pwd_output_folder =         '%s/%s' % (output_folder, output_folder_name)
+input_aa_seq_file =         '%s/%s' % (output_folder, input_aa_seq_file_name)
+output_seq_file =           '%s/%s' % (output_folder, output_seq_file_name)
+output_aa_seq_file =        '%s/%s' % (output_folder, output_aa_seq_file_name)
+output_blast =              '%s/%s' % (output_folder, output_blast_file_name)
+output_blast_aa =           '%s/%s' % (output_folder, output_blast_aa_file_name)
+simulate_report_file_temp = '%s/%s' % (output_folder, simulate_report_file_temp_file_name)
+simulate_report_file =      '%s/%s' % (output_folder, simulate_report_file_name)
+insertion_report_file =     '%s/%s' % (output_folder, insertion_report_file_name)
 
 
 # create random mutation output folder
@@ -338,9 +348,9 @@ for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
 
     # get mutation identity for each sequence to be transferred
     mutant_identity = None
-    if mixed_mode == 0:
+    if mixed_mode == None:
         mutant_identity = 100 - mutation_level
-    if mixed_mode == 1:
+    else:
         current_mutation_level = random.randint(min_iden, max_iden)
         mutant_identity = 100 - current_mutation_level
 
@@ -484,19 +494,19 @@ output_handle.close()
 output_aa_handle.close()
 simulate_report.close()
 
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutants of input sequences exported to: %s' % output_seq_file)
-sleep(1)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutants of input sequences exported to %s' % output_seq_file_name)
+sleep(0.5)
 
 # run blastn between input and mutant sequences
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating nucleotide identity (by BlastN) between input sequences and their mutants')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating nc identity (by BlastN) between input sequences and their mutants')
 blast_parameters_outfmt = ' -evalue 1e-5 -task blastn'
 blast_parameters_outfmt_6 = ' -evalue 1e-5 -outfmt 6 -task blastn'
 command_blast = 'blastn -query %s -subject %s -out %s%s' % (input_seq_file, output_seq_file, output_blast, blast_parameters_outfmt_6)
 os.system(command_blast)
 
 # run blastp between input and mutant sequences
-sleep(1)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating amino acids identity (by BlastP) between input sequences and their mutants')
+sleep(0.5)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating aa identity (by BlastP) between input sequences and their mutants')
 blast_parameters_outfmt_aa = ' -evalue 1e-5 -task blastp'
 blast_parameters_outfmt_6_aa = ' -evalue 1e-5 -outfmt 6 -task blastp'
 command_blast_aa = 'blastp -query %s -subject %s -out %s%s' % (input_aa_seq_file, output_aa_seq_file, output_blast_aa, blast_parameters_outfmt_6_aa)
@@ -545,8 +555,8 @@ for each in all_sequence_id_list:
 overall_blast_results_handle.close()
 os.system('cat %s %s > %s' % (overall_blast_results,simulate_report_file_temp, simulate_report_file))
 
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random mutation report exported to: %s' % simulate_report_file)
-sleep(1)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random mutation report exported to %s' % simulate_report_file_name)
+sleep(0.5)
 
 
 # get the setting of flanking sequences
@@ -560,10 +570,11 @@ if dynamic_flanking_seqs == True:
     lf_dict, rf_dict = get_flanking_seqs_dict(common_stop_sequence_l, common_stop_sequence_r)
 
 
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Dynamic_flanking_seqs: %s' % dynamic_flanking_seqs)
-
 # read insert sequences into a list
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random insertion...')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random insertion')
+sleep(1)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Dynamic_flanking_seqs set to %s' % dynamic_flanking_seqs)
+
 pwd_sequences_file = output_seq_file
 transfers = open(pwd_transfers)
 insertion_report_handle = open(insertion_report_file, 'w')
@@ -676,18 +687,18 @@ for each in transfers:
 insertion_report_handle.close()
 
 
-sleep(1)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Recombinants of recipient genomes exported to: %s' % pwd_output_folder)
-sleep(1)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random insertion report exported to: %s' % insertion_report_file)
-sleep(1)
+sleep(0.5)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Recombinants of recipient genomes exported to folder %s' % output_folder_name)
+sleep(0.5)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random insertion report exported to %s' % insertion_report_file_name)
 
 # delete temporary files
+sleep(0.5)
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Removing temporary files')
 os.remove(output_blast)
 os.remove(output_blast_aa)
 os.remove(overall_blast_results)
 os.remove(simulate_report_file_temp)
 
-sleep(1)
+sleep(0.5)
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' All done, thanks for using HgtSIM!')
