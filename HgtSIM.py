@@ -344,6 +344,8 @@ for each_codon in standard_table.forward_table:
 # get codon_to_aa_dict
 codon_to_aa_dict = standard_table.forward_table
 
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random mutation')
+
 for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
 
     # get mutation identity for each sequence to be transferred
@@ -356,7 +358,7 @@ for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
 
     input_seq = str(each_seq.seq)
     seq_length = len(input_seq)
-    print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random mutation: %s' % (each_seq.id))
+    #print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Running random mutation: %s' % (each_seq.id))
     sleep(0.05)
     all_sequence_id_list.append(each_seq.id)
     sequence_length_dict_nc[each_seq.id] = seq_length
@@ -494,11 +496,11 @@ output_handle.close()
 output_aa_handle.close()
 simulate_report.close()
 
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutants of input sequences exported to %s' % output_seq_file_name)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutants sequences exported to file: %s' % output_seq_file_name)
 sleep(0.5)
 
 # run blastn between input and mutant sequences
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating nc identity (by BlastN) between input sequences and their mutants')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating nc identity (by BlastN)')
 blast_parameters_outfmt = ' -evalue 1e-5 -task blastn'
 blast_parameters_outfmt_6 = ' -evalue 1e-5 -outfmt 6 -task blastn'
 command_blast = 'blastn -query %s -subject %s -out %s%s' % (input_seq_file, output_seq_file, output_blast, blast_parameters_outfmt_6)
@@ -506,7 +508,7 @@ os.system(command_blast)
 
 # run blastp between input and mutant sequences
 sleep(0.5)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating aa identity (by BlastP) between input sequences and their mutants')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating aa identity (by BlastP)')
 blast_parameters_outfmt_aa = ' -evalue 1e-5 -task blastp'
 blast_parameters_outfmt_6_aa = ' -evalue 1e-5 -outfmt 6 -task blastp'
 command_blast_aa = 'blastp -query %s -subject %s -out %s%s' % (input_aa_seq_file, output_aa_seq_file, output_blast_aa, blast_parameters_outfmt_6_aa)
@@ -555,7 +557,7 @@ for each in all_sequence_id_list:
 overall_blast_results_handle.close()
 os.system('cat %s %s > %s' % (overall_blast_results,simulate_report_file_temp, simulate_report_file))
 
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random mutation report exported to %s' % simulate_report_file_name)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Mutation report exported to file: %s' % simulate_report_file_name)
 sleep(0.5)
 
 
@@ -688,13 +690,13 @@ insertion_report_handle.close()
 
 
 sleep(0.5)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Recombinants of recipient genomes exported to folder %s' % output_folder_name)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Recombinants exported to folder: %s' % output_folder_name)
 sleep(0.5)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Random insertion report exported to %s' % insertion_report_file_name)
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Insertion report exported to file: %s' % insertion_report_file_name)
 
 # delete temporary files
 sleep(0.5)
-print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Removing temporary files')
+print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Deleting temporary files')
 os.remove(output_blast)
 os.remove(output_blast_aa)
 os.remove(overall_blast_results)
