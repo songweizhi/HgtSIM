@@ -244,6 +244,16 @@ parser.add_argument('-l',
                     default=10,
                     help='the minimum length of intergenic regions to be considered for insertion')
 
+parser.add_argument('-blastn',
+                    required=False,
+                    default='blastn',
+                    help='path/to/blastn')
+
+parser.add_argument('-blastp',
+                    required=False,
+                    default='blastp',
+                    help='path/to/blastp')
+
 args = vars(parser.parse_args())
 input_seq_file_name = args['t']
 mutation_level = args['i']
@@ -257,6 +267,8 @@ keep_cds = int(args['keep_cds'])
 recipients_gbk_folder = args['a']
 minimum_intergene_length = int(args['l'])
 mixed_mode = args['mixed']
+blastn_exe = args['blastn']
+blastp_exe = args['blastp']
 
 min_iden = None
 max_iden = None
@@ -499,17 +511,15 @@ sleep(0.5)
 
 # run blastn between input and mutant sequences
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating nc identity (by BlastN)')
-blast_parameters_outfmt = ' -evalue 1e-5 -task blastn'
 blast_parameters_outfmt_6 = ' -evalue 1e-5 -outfmt 6 -task blastn'
-command_blast = 'blastn -query %s -subject %s -out %s%s' % (input_seq_file, output_seq_file, output_blast, blast_parameters_outfmt_6)
+command_blast = '%s -query %s -subject %s -out %s%s' % (blastn_exe, input_seq_file, output_seq_file, output_blast, blast_parameters_outfmt_6)
 os.system(command_blast)
 
 # run blastp between input and mutant sequences
 sleep(0.5)
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Calculating aa identity (by BlastP)')
-blast_parameters_outfmt_aa = ' -evalue 1e-5 -task blastp'
 blast_parameters_outfmt_6_aa = ' -evalue 1e-5 -outfmt 6 -task blastp'
-command_blast_aa = 'blastp -query %s -subject %s -out %s%s' % (input_aa_seq_file, output_aa_seq_file, output_blast_aa, blast_parameters_outfmt_6_aa)
+command_blast_aa = '%s -query %s -subject %s -out %s%s' % (blastp_exe, input_aa_seq_file, output_aa_seq_file, output_blast_aa, blast_parameters_outfmt_6_aa)
 os.system(command_blast_aa)
 
 # put the results of blastn and blastp together

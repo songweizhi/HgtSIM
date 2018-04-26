@@ -45,12 +45,11 @@ Help information
           -lf         left end flanking sequences
           -rf         right end flanking sequences
           -mixed      randomly assign mutation levels between specified values, parameter format: min-max
-          -keep_cds   insert transfers only to non-coding regions, need the annotation
-                      files (in gbk format) of recipient genomes
-          -a          folder holds the annotation files (in gbk format) of recipient
-                      genomes
-          -l          the minimum length of intergenic regions to be considered for
-                      insertion
+          -keep_cds   insert transfers only to non-coding regions, need the annotation files (in gbk format) of recipient genomes
+          -a          folder holds the annotation files (in gbk format) of recipient genomes
+          -l          the minimum length of intergenic regions to be considered for insertion
+          -blastn     path/to/blastn
+          -blastp     path/to/blastp
 
 
 Input files and arguments
