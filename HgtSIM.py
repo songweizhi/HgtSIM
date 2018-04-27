@@ -296,9 +296,9 @@ wd = os.getcwd()
 
 output_folder = ''
 if mixed_mode == None:
-    output_folder = '%s/outputs_%s_%s'          % (wd, mutation_level, ratio)
+    output_folder =                     '%s/outputs_%s_%s'          % (wd, mutation_level, ratio)
 else:
-    output_folder = '%s/outputs_min%s-max%s_%s' % (wd, min_iden, max_iden, ratio)
+    output_folder =                     '%s/outputs_min%s-max%s_%s' % (wd, min_iden, max_iden, ratio)
 
 output_seq_file_name =                  'input_sequence_mutant_nc.fasta'
 output_aa_seq_file_name =               'input_sequence_mutant_aa.fasta'
@@ -310,19 +310,19 @@ output_blast_file_name =                'blast_results_nc.txt'
 output_blast_aa_file_name =             'blast_results_aa.txt'
 simulate_report_file_temp_file_name =   'Step_1_mutation_report_temp.txt'
 
-input_seq_file =            '%s/%s' % (wd, input_seq_file_name)
-pwd_transfers =             '%s/%s' % (wd, transfer_profile_file)
-pwd_recipients_folder =     '%s/%s' % (wd, recipients_folder)
-pwd_recipients_gbk_folder = '%s/%s' % (wd, recipients_gbk_folder)
-pwd_output_folder =         '%s/%s' % (output_folder, output_folder_name)
-input_aa_seq_file =         '%s/%s' % (output_folder, input_aa_seq_file_name)
-output_seq_file =           '%s/%s' % (output_folder, output_seq_file_name)
-output_aa_seq_file =        '%s/%s' % (output_folder, output_aa_seq_file_name)
-output_blast =              '%s/%s' % (output_folder, output_blast_file_name)
-output_blast_aa =           '%s/%s' % (output_folder, output_blast_aa_file_name)
-simulate_report_file_temp = '%s/%s' % (output_folder, simulate_report_file_temp_file_name)
-simulate_report_file =      '%s/%s' % (output_folder, simulate_report_file_name)
-insertion_report_file =     '%s/%s' % (output_folder, insertion_report_file_name)
+input_seq_file =                        '%s/%s' % (wd, input_seq_file_name)
+pwd_transfers =                         '%s/%s' % (wd, transfer_profile_file)
+pwd_recipients_folder =                 '%s/%s' % (wd, recipients_folder)
+pwd_recipients_gbk_folder =             '%s/%s' % (wd, recipients_gbk_folder)
+pwd_output_folder =                     '%s/%s' % (output_folder, output_folder_name)
+input_aa_seq_file =                     '%s/%s' % (output_folder, input_aa_seq_file_name)
+output_seq_file =                       '%s/%s' % (output_folder, output_seq_file_name)
+output_aa_seq_file =                    '%s/%s' % (output_folder, output_aa_seq_file_name)
+output_blast =                          '%s/%s' % (output_folder, output_blast_file_name)
+output_blast_aa =                       '%s/%s' % (output_folder, output_blast_aa_file_name)
+simulate_report_file_temp =             '%s/%s' % (output_folder, simulate_report_file_temp_file_name)
+simulate_report_file =                  '%s/%s' % (output_folder, simulate_report_file_name)
+insertion_report_file =                 '%s/%s' % (output_folder, insertion_report_file_name)
 
 
 # create random mutation output folder
