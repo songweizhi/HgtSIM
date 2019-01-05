@@ -24,12 +24,7 @@ Dependencies
 
 Change Log
 ---
-
-+ To do:
-    + run Prodigal if "-keep_cds" was specified
-    + check Ns in provided gene sequences
-    + check whether provided sequences to transfer are ORFs, exit if not
-
+ 
 + 2019-01-06:
     + HgtSIM can be installed with "pip3 install HgtSIM" now.
 
@@ -43,6 +38,13 @@ Change Log
     + add support for dynamic flanking sequences.
     + add support for the 'mixed' mode.
     + add support for the 'keep_cds' option.
+
+
+To-do
+---
++ run Prodigal if "-keep_cds" was specified
++ check Ns in provided gene sequences
++ check whether provided sequences to transfer are ORFs, exit if not
 
 
 Installation
