@@ -26,6 +26,7 @@ Change Log
 ---
 
 + To do:
+    + run Prodigal if "-keep_cds" was specified
     + check Ns in provided gene sequences
     + check whether provided sequences to transfer are ORFs, exit if not
 
