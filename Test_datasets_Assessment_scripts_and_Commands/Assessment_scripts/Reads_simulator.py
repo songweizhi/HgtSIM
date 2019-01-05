@@ -163,8 +163,8 @@ for each in open(pwd_abundance_file):
     replicate_number = len(each_split) - 1
     genome_name_no_extension_list.append(genome_name_no_extension)
     genome_name_list.append(genome_name)
-    genome_size_list.append(genome_size_mbp)
-
+    genome_size_list.append(genome_size)
+print(genome_size_list)
 # prepare GemSIM working directory
 # if os.path.isdir(pwd_SimSeq_wd):
 #     shutil.rmtree(pwd_SimSeq_wd)
@@ -186,13 +186,14 @@ while n <= replicate_number:
         each_split = each.strip().split('\t')
         current_abundance = int(each_split[n])
         current_abundance_list.append(current_abundance)
-
+    print(current_abundance_list)
     m = 0
     weight_list = []
     while m < len(genome_name_no_extension_list):
         current_weight = (genome_size_list[m])*(current_abundance_list[m])
         weight_list.append(current_weight)
         m += 1
+    print(weight_list)
     weight_summation = sum(weight_list)
     multiply_unit = reads_number/weight_summation
     reads_number_list = []

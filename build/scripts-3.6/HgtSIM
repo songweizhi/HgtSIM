@@ -1,0 +1,671 @@
+#!python
+
+# Copyright (C) 2017, Weizhi Song, Kerrin Steensen and Torsten Thomas.
+# songwz03@gmail.com and t.thomas@unsw.edu.au
+
+# HgtSIM is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+# General Public License as published by the Free Software Foundation, either version 3 of the License,
+# or (at your option) any later version.
+
+# HgtSIM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General
+# Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License along with this program.
+# If not, see <http://www.gnu.org/licenses/>.
+
+
+import os
+import random
+import shutil
+import argparse
+from datetime import datetime
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
+from Bio.Data import CodonTable
+from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import generic_dna
+from Bio.SeqUtils.CodonUsage import SynonymousCodons
+
+
+def report_and_log(message_for_report, log_file, keep_quiet):
+
+    time_format = '[%Y-%m-%d %H:%M:%S]'
+    with open(log_file, 'a') as log_handle:
+        log_handle.write('%s %s\n' % ((datetime.now().strftime(time_format)), message_for_report))
+
+    if keep_quiet is False:
+        print('%s %s' % ((datetime.now().strftime(time_format)), message_for_report))
+
+
+def force_create_folder(folder_to_create):
+    if os.path.isdir(folder_to_create):
+        shutil.rmtree(folder_to_create, ignore_errors=True)
+        if os.path.isdir(folder_to_create):
+            shutil.rmtree(folder_to_create, ignore_errors=True)
+            if os.path.isdir(folder_to_create):
+                shutil.rmtree(folder_to_create, ignore_errors=True)
+                if os.path.isdir(folder_to_create):
+                    shutil.rmtree(folder_to_create, ignore_errors=True)
+    os.mkdir(folder_to_create)
+
+
+def get_codon_differences(codon_1, codon_2):
+    n = 0
+    m = 0
+    while n < 3:
+        if codon_1[n] != codon_2[n]:
+            m += 1
+        n += 1
+    return m
+
+
+def split_sequence(original_seq):
+    n = 0
+    original_seq_split = []
+    while n+2 < len(original_seq):
+        original_seq_split.append(original_seq[n: n+3])
+        n += 3
+    return original_seq_split
+
+
+def get_mutant_codon_number(total, ratio):
+
+    ratio_split = ratio.split('-')
+    ratio_1_samesense = int(ratio_split[0])  # one base samesense
+    ratio_1 = int(ratio_split[1])  # one base non-samesense
+    ratio_2 = int(ratio_split[2])  # two bases
+    ratio_3 = int(ratio_split[3])  # three bases
+    total_unit = (ratio_1_samesense * 1) + (ratio_1 * 1) + (ratio_2 * 2) + (ratio_3 * 3)
+    mult_step = total//total_unit
+    mutant_codon_number_1 = (ratio_1 * mult_step)
+    mutant_codon_number_2 = (ratio_2 * mult_step)
+    mutant_codon_number_3 = (ratio_3 * mult_step)
+    mutant_codon_number_1_samesense = (total - mutant_codon_number_1 - mutant_codon_number_2 * 2 - mutant_codon_number_3 * 3)
+    total_mutant_codon_number = mutant_codon_number_1_samesense + mutant_codon_number_1 + mutant_codon_number_2 + mutant_codon_number_3
+
+    return [mutant_codon_number_1_samesense, mutant_codon_number_1, mutant_codon_number_2, mutant_codon_number_3], total_mutant_codon_number
+
+
+def get_synonymous_codons(codon):
+    for each in SynonymousCodons:
+        if codon in SynonymousCodons[each]:
+            synonymous_codon_list = [x for x in SynonymousCodons[each] if x != codon]
+            return synonymous_codon_list
+
+
+def disorder_2_mapped_list(list_1, list_2):
+
+    # generate a dict
+    mapping_dict = {}
+    n = 0
+    for each_a in list_1:
+        mapping_dict[each_a] = list_2[n]
+        n += 1
+
+    # get new list
+    list_1_new = []
+    list_2_new = []
+    for each in mapping_dict:
+        list_1_new.append(each)
+        list_2_new.append(mapping_dict[each])
+
+    return list_1_new, list_2_new
+
+
+def get_flanking_seqs_dict(lf_file, rf_file):
+    lf_dict = {}
+    for each_seq in SeqIO.parse(lf_file, 'fasta'):
+        lf_dict[each_seq.id] = str(each_seq.seq)
+
+    rf_dict = {}
+    for each_seq in SeqIO.parse(rf_file, 'fasta'):
+        rf_dict[each_seq.id] = str(each_seq.seq)
+
+    return lf_dict, rf_dict
+
+
+def get_random_insertion(keep_cds, recipient_sequence, insert_sequence_list, insert_sequence_id_list, dynamic_flanking_seqs, lf_dict, rf_dict, common_stop_sequence_l, common_stop_sequence_r, recipient_genome_id, recipient_ctg_id, recipient_ctg_intergenic_list):
+
+    insert_gene_number = len(insert_sequence_list)
+    ctg_length = len(recipient_sequence)
+    random_intergenics_sorted = []
+
+    # get break down point
+    if keep_cds == 0:
+        length_list = list(range(1, ctg_length))
+        random_bases = random.sample(length_list, insert_gene_number)
+        random_intergenics_sorted = sorted(random_bases)
+    elif keep_cds == 1:
+        # randomly select intergenic
+        random_selected_intergenics = random.sample(recipient_ctg_intergenic_list, insert_gene_number)
+        # get the middle base of randomly selected intergenics
+        random_selected_intergenics_middle_base = []
+        for each_intergenic in random_selected_intergenics:
+            each_intergenic_start = each_intergenic[0]
+            each_intergenic_end = each_intergenic[1]
+            each_intergenic_middle = round((each_intergenic_start + each_intergenic_end)/2)
+            random_selected_intergenics_middle_base.append(each_intergenic_middle)
+        # sort it
+        random_intergenics_sorted = sorted(random_selected_intergenics_middle_base)
+
+    # get the start and stop points of all sub_sequences
+    sub_sequences_list = []
+
+    new_seq = ''
+    for_report = []
+    if random_intergenics_sorted == []:
+        new_seq = recipient_sequence
+        for_report = ['%s\t%s\t%s\t%s' % (recipient_genome_id, recipient_ctg_id, 'None', 'None')]
+    else:
+        n = 0
+        first_sequence = [1, random_intergenics_sorted[n]]
+        first_sequence_nc = recipient_sequence[0:random_intergenics_sorted[n]]
+        sub_sequences_list.append(first_sequence)
+        while n < insert_gene_number - 1:
+            current_sequence = [random_intergenics_sorted[n] + 1, random_intergenics_sorted[n+1]]
+            sub_sequences_list.append(current_sequence)
+            n += 1
+        last_sequence = [random_intergenics_sorted[n] + 1, ctg_length]
+        sub_sequences_list.append(last_sequence)
+
+        # get new sequences
+        m = 0
+        while m <= insert_gene_number:
+            if m < insert_gene_number:
+                for_report.append('%s\t%s\t%s\t%s' % (recipient_genome_id, recipient_ctg_id, random_intergenics_sorted[m], insert_sequence_id_list[m]))
+
+            if m == 0:
+                new_seq = first_sequence_nc
+            if m > 0:
+                current_subsequence_start = sub_sequences_list[m][0] - 1
+                current_subsequence_stop = sub_sequences_list[m][1]
+                current_subsequence = recipient_sequence[current_subsequence_start:current_subsequence_stop]
+                current_insert = insert_sequence_list[m - 1]
+                current_insert_id = insert_sequence_id_list[m - 1]
+                # add flanking sequences
+                current_insert_with_stop = ''
+                if dynamic_flanking_seqs == False:
+                    current_insert_with_stop = '%s%s%s' % (common_stop_sequence_l, current_insert, common_stop_sequence_r)
+                if dynamic_flanking_seqs == True:
+                    common_stop_sequence_l = ''
+                    common_stop_sequence_r = ''
+                    if current_insert_id in lf_dict:
+                        common_stop_sequence_l = lf_dict[current_insert_id]
+                    if current_insert_id in rf_dict:
+                        common_stop_sequence_r = rf_dict[current_insert_id]
+                    current_insert_with_stop = '%s%s%s' % (common_stop_sequence_l, current_insert, common_stop_sequence_r)
+
+                new_seq += current_insert_with_stop
+                new_seq += current_subsequence
+            m += 1
+
+    return new_seq, for_report
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-p', required=False, default='HgtSIM', help='output prefix')
+    parser.add_argument('-t', required=True, help='sequences of genes to be transferred (multi-fasta format)')
+    parser.add_argument('-i', required=False, type=int, help='mutation level')
+    parser.add_argument('-d', required=True, help='distribution of transfers to the recipient genomes')
+    parser.add_argument('-f', required=True, help='folder holds recipient genomes')
+    parser.add_argument('-r', required=False, default='1-0-1-1', help='ratio of mutation types')
+    parser.add_argument('-x', required=False, default='fna', help='file extension of recipient genomes')
+    parser.add_argument('-lf', required=False, default='', help='left end flanking sequences')
+    parser.add_argument('-rf', required=False, default='', help='right end flanking sequences')
+    parser.add_argument('-mixed', required=False, default=None, help='randomly assign mutation levels between specified values, parameter format: min-max')
+    parser.add_argument('-keep_cds', action="store_true", required=False, help='insert transfers only to non-coding regions, need the annotation files (in gbk format) of recipient genomes')
+    parser.add_argument('-a', required=False, help='folder holds the annotation files (in gbk format) of recipient genomes')
+    parser.add_argument('-l', required=False, type=int, default=10, help='the minimum length of intergenic regions to be considered for insertion')
+    parser.add_argument('-blastn', required=False, default='blastn', help='path to blastn executable, default: blastn')
+    parser.add_argument('-blastp', required=False, default='blastp', help='path to blastp executable, default: blastp')
+    parser.add_argument('-quiet', required=False, action="store_true", help='not report progress')
+
+    args = vars(parser.parse_args())
+    output_prefix = args['p']
+    input_seq_file_name = args['t']
+    mutation_level = args['i']
+    ratio = args['r']
+    transfer_profile_file = args['d']
+    recipients_genome_extension = args['x']
+    common_stop_sequence_l = args['lf']
+    common_stop_sequence_r = args['rf']
+    recipients_folder = args['f']
+    keep_cds = int(args['keep_cds'])
+    recipients_gbk_folder = args['a']
+    minimum_intergene_length = int(args['l'])
+    mixed_mode = args['mixed']
+    blastn_exe = args['blastn']
+    blastp_exe = args['blastp']
+    keep_quiet = args['quiet']
+
+
+    min_iden = None
+    max_iden = None
+    pwd_log_file = ''
+    output_folder = ''
+    if mixed_mode == None:
+        output_folder = '%s_outputs_%s_%s' % (output_prefix, mutation_level, ratio)
+        pwd_log_file = '%s/%s_%s.log' % (output_folder, output_prefix, datetime.now().strftime('%Y-%m-%d_%Hh-%Mm-%Ss_%f'))
+        report_and_log(('Mixed mode set to False'), pwd_log_file, keep_quiet)
+
+    else:
+        mixed_mode_test_split = mixed_mode.split('-')
+        if len(mixed_mode_test_split) != 2:
+            report_and_log(('Please check the parameter format for argument "mixed", e.g.: 5-25'), pwd_log_file, keep_quiet)
+            exit()
+        else:
+            min_iden = float(mixed_mode_test_split[0])
+            max_iden = float(mixed_mode_test_split[1])
+            output_folder = '%s_outputs_min%s-max%s_%s' % (output_prefix, min_iden, max_iden, ratio)
+            pwd_log_file = '%s/%s_%s.log' % (output_folder, output_prefix, datetime.now().strftime('%Y-%m-%d_%Hh-%Mm-%Ss_%f'))
+            report_and_log(('Mixed mode set to True, minimum mutation level: %s, maximum mutation level: %s' % (min_iden, max_iden)), pwd_log_file, keep_quiet)
+
+    if recipients_folder[-1] == '/':
+        recipients_folder = recipients_folder[:-1]
+    if (keep_cds == 1) and (recipients_gbk_folder[-1] == '/'):
+        recipients_gbk_folder = recipients_gbk_folder[:-1]
+
+    #########################################################################################################
+
+    # define output file names
+    output_seq_file_name =                  'input_sequence_mutant_nc.fasta'
+    output_aa_seq_file_name =               'input_sequence_mutant_aa.fasta'
+    simulate_report_file_name =             'Step_1_mutation_report.txt'
+    output_folder_name =                    'Genomes_with_transfers'
+    insertion_report_file_name =            'Step_2_insertion_report.txt'
+    input_aa_seq_file_name =                'input_sequence_aa.fasta'
+    output_blast_file_name =                'blast_results_nc.txt'
+    output_blast_aa_file_name =             'blast_results_aa.txt'
+    simulate_report_file_temp_file_name =   'Step_1_mutation_report_temp.txt'
+
+    input_seq_file =                        '%s'    % (input_seq_file_name)
+    pwd_transfers =                         '%s'    % (transfer_profile_file)
+    pwd_recipients_folder =                 '%s'    % (recipients_folder)
+    pwd_recipients_gbk_folder =             '%s'    % (recipients_gbk_folder)
+    pwd_output_folder =                     '%s/%s' % (output_folder, output_folder_name)
+    input_aa_seq_file =                     '%s/%s' % (output_folder, input_aa_seq_file_name)
+    output_seq_file =                       '%s/%s' % (output_folder, output_seq_file_name)
+    output_aa_seq_file =                    '%s/%s' % (output_folder, output_aa_seq_file_name)
+    output_blast =                          '%s/%s' % (output_folder, output_blast_file_name)
+    output_blast_aa =                       '%s/%s' % (output_folder, output_blast_aa_file_name)
+    simulate_report_file_temp =             '%s/%s' % (output_folder, simulate_report_file_temp_file_name)
+    simulate_report_file =                  '%s/%s' % (output_folder, simulate_report_file_name)
+    insertion_report_file =                 '%s/%s' % (output_folder, insertion_report_file_name)
+
+
+    # create random mutation output folder
+    force_create_folder(output_folder)
+    force_create_folder(pwd_output_folder)
+
+
+    simulate_report = open(simulate_report_file_temp, 'w')
+    input_aa_handle = open(input_aa_seq_file, 'w')
+    output_handle = open(output_seq_file, 'w')
+    output_aa_handle = open(output_aa_seq_file, 'w')
+    all_sequence_id_list = []
+    sequence_length_dict_nc = {}
+    sequence_length_dict_aa = {}
+    n = 0
+
+    # get non-start and non-stop codon list
+    codons_non_start_stop = []
+    standard_table = CodonTable.unambiguous_dna_by_name["Standard"]
+    for each_codon in standard_table.forward_table:
+        if each_codon not in standard_table.start_codons:
+            codons_non_start_stop.append(each_codon)
+
+    # get codon_to_aa_dict
+    codon_to_aa_dict = standard_table.forward_table
+
+    report_and_log(('Running random mutation'), pwd_log_file, keep_quiet)
+
+    for each_seq in SeqIO.parse(input_seq_file, 'fasta'):
+
+        # get mutation identity for each sequence to be transferred
+        mutant_identity = None
+        if mixed_mode == None:
+            mutant_identity = 100 - mutation_level
+        else:
+            current_mutation_level = random.randint(min_iden, max_iden)
+            mutant_identity = 100 - current_mutation_level
+
+        input_seq = str(each_seq.seq)
+        seq_length = len(input_seq)
+        all_sequence_id_list.append(each_seq.id)
+        sequence_length_dict_nc[each_seq.id] = seq_length
+        sequence_length_dict_aa[each_seq.id + '_aa'] = int(seq_length/3 - 1)
+
+        # get translated input sequences
+        input_seq_object = Seq(str(each_seq.seq))
+        input_seq_aa_object = input_seq_object.translate()
+        input_seq_aa_record = SeqRecord(input_seq_aa_object)
+        input_seq_aa_record.id = each_seq.id + '_aa'
+        input_seq_aa_record.description = ''
+        SeqIO.write(input_seq_aa_record, input_aa_handle, 'fasta')
+
+        # get total number of mutant codons according to defined ratio
+        mutation_bps = (seq_length * (100 - mutant_identity)) // 100
+        mutant_codon_number_list, mutant_codon_number = get_mutant_codon_number(mutation_bps, ratio)
+
+        # split input sequence
+        input_seq_split = split_sequence(input_seq)
+
+        # index split input sequence
+        input_seq_split_index = list(range(0, len(input_seq_split), 1))
+
+        # randomly select defined number of codons from splitted input sequences
+        input_seq_split_index_radom = random.sample(input_seq_split_index[1:-1], mutant_codon_number)
+
+        # get codons for each types of mutation
+        codons_for_samesense_mutation = input_seq_split_index_radom[:mutant_codon_number_list[0]]
+        codons_for_mutation_1_bases = input_seq_split_index_radom[mutant_codon_number_list[0] : mutant_codon_number_list[0] + mutant_codon_number_list[1]]
+        codons_for_mutation_2_bases = input_seq_split_index_radom[mutant_codon_number_list[0] + mutant_codon_number_list[1] : mutant_codon_number_list[0] + mutant_codon_number_list[1] + mutant_codon_number_list[2]]
+        codons_for_mutation_3_bases = input_seq_split_index_radom[mutant_codon_number_list[0] + mutant_codon_number_list[1] + mutant_codon_number_list[2]:]
+        mutation_type_list = [codons_for_samesense_mutation, codons_for_mutation_1_bases, codons_for_mutation_2_bases, codons_for_mutation_3_bases]
+
+        # if 'TGG' in codons_for_samesense_mutation, move it to codons_for_mutation_1_bases
+        codons_for_samesense_mutation_non_TGG_ATG = []
+        for each_codon_for_samesense_mutation in codons_for_samesense_mutation:
+            if input_seq_split[each_codon_for_samesense_mutation] not in ['TGG', 'tgg', 'UGG', 'ugg', 'ATG', 'atg', 'UTG', 'utg']:
+                codons_for_samesense_mutation_non_TGG_ATG.append(each_codon_for_samesense_mutation)
+            else:
+                codons_for_mutation_1_bases.append(each_codon_for_samesense_mutation)
+
+        simulate_report.write('\n\n%s:\n' % each_seq.id)
+        simulate_report.write('One point mutation (same-sense):\t%s\n' % len(codons_for_samesense_mutation_non_TGG_ATG))
+        simulate_report.write('One point mutation (non-same-sense):\t%s\n' % len(codons_for_mutation_1_bases))
+        simulate_report.write('Two points mutation:\t%s\n' % len(codons_for_mutation_2_bases))
+        simulate_report.write('Three points mutation:\t%s\n' % len(codons_for_mutation_3_bases))
+
+        # simulate same-sense mutation
+        for each_codon_for_samesense_mutation in codons_for_samesense_mutation_non_TGG_ATG:
+            current_codon_for_samesense_mutation = input_seq_split[each_codon_for_samesense_mutation]
+            current_codon_for_samesense_mutation_for_report = current_codon_for_samesense_mutation
+            current_codon_for_samesense_mutation_synonymous_codons = get_synonymous_codons(current_codon_for_samesense_mutation)
+            current_codon_synonymous_codons_1bp = []
+            for each in current_codon_for_samesense_mutation_synonymous_codons:
+                if get_codon_differences(each, current_codon_for_samesense_mutation) == 1:
+                    current_codon_synonymous_codons_1bp.append(each)
+
+            current_codon_synonymous_codons_1bp_random = random.choice(current_codon_synonymous_codons_1bp)
+            input_seq_split[each_codon_for_samesense_mutation] = current_codon_synonymous_codons_1bp_random
+            simulate_report.write('%s\tOne point mutation (same-sense)\t%s-%sbp\t%s(%s)\t%s(%s)\n' % (each_seq.id, (3 * each_codon_for_samesense_mutation + 1),
+                                                                                                      (3 * each_codon_for_samesense_mutation + 3),
+                                                                                                      current_codon_for_samesense_mutation,
+                                                                                                      codon_to_aa_dict[current_codon_for_samesense_mutation],
+                                                                                                      current_codon_synonymous_codons_1bp_random,
+                                                                                                      codon_to_aa_dict[current_codon_synonymous_codons_1bp_random]))
+
+        # simulate mutation with 1bp difference
+        for each_codon_for_1_base_mutation in codons_for_mutation_1_bases:
+            current_codon_for_1_base_mutation = input_seq_split[each_codon_for_1_base_mutation]
+            current_1_diff_codons_all = []
+            for each_codon in codons_non_start_stop:
+                if get_codon_differences(current_codon_for_1_base_mutation, each_codon) == 1:
+                    current_1_diff_codons_all.append(each_codon)
+            current_1_diff_codons_synonymous = get_synonymous_codons(current_codon_for_1_base_mutation)
+            current_1_diff_codons_non_synonymous = []
+            for each_codon in current_1_diff_codons_all:
+                if each_codon not in current_1_diff_codons_synonymous:
+                    current_1_diff_codons_non_synonymous.append(each_codon)
+            current_1_diff_codons_non_synonymous_random = random.choice(current_1_diff_codons_non_synonymous)
+            input_seq_split[each_codon_for_1_base_mutation] = current_1_diff_codons_non_synonymous_random
+            simulate_report.write('%s\tOne point mutation (non-same-sense)\t%s-%sbp\t%s(%s)\t%s(%s)\n' % (each_seq.id, (3 * each_codon_for_1_base_mutation + 1),
+                                                                                                          (3 * each_codon_for_1_base_mutation + 3),
+                                                                                                          current_codon_for_1_base_mutation,
+                                                                                                          codon_to_aa_dict[current_codon_for_1_base_mutation],
+                                                                                                          current_1_diff_codons_non_synonymous_random,
+                                                                                                          codon_to_aa_dict[current_1_diff_codons_non_synonymous_random]))
+
+        # simulate mutation with 2bp differences
+        for each_codon_for_2_base_mutation in codons_for_mutation_2_bases:
+            current_codon_for_2_base_mutation = input_seq_split[each_codon_for_2_base_mutation]
+            current_2_diff_codons_all = []
+            for each_codon in codons_non_start_stop:
+                if get_codon_differences(current_codon_for_2_base_mutation, each_codon) == 2:
+                    current_2_diff_codons_all.append(each_codon)
+            current_2_diff_codons_all_random = random.choice(current_2_diff_codons_all)
+            input_seq_split[each_codon_for_2_base_mutation] = current_2_diff_codons_all_random
+            simulate_report.write('%s\tTwo points mutation\t%s-%sbp\t%s(%s)\t%s(%s)\n' % (each_seq.id, (3 * each_codon_for_2_base_mutation + 1),
+                                                                                          (3 * each_codon_for_2_base_mutation + 3),
+                                                                                          current_codon_for_2_base_mutation,
+                                                                                          codon_to_aa_dict[current_codon_for_2_base_mutation],
+                                                                                          current_2_diff_codons_all_random,
+                                                                                          codon_to_aa_dict[current_2_diff_codons_all_random]))
+
+        # simulate mutation with 3bp differences
+        for each_codon_for_3_base_mutation in codons_for_mutation_3_bases:
+            current_codon_for_3_base_mutation = input_seq_split[each_codon_for_3_base_mutation]
+            current_3_diff_codons_all = []
+            for each_codon in codons_non_start_stop:
+                if get_codon_differences(current_codon_for_3_base_mutation, each_codon) == 3:
+                    current_3_diff_codons_all.append(each_codon)
+            current_3_diff_codons_all_random = random.choice(current_3_diff_codons_all)
+            input_seq_split[each_codon_for_3_base_mutation] = current_3_diff_codons_all_random
+            simulate_report.write('%s\tThree points mutation\t%s-%sbp\t%s(%s)\t%s(%s)\n' % (each_seq.id, (3 * each_codon_for_3_base_mutation + 1),
+                                                                                            (3 * each_codon_for_3_base_mutation + 3),
+                                                                                            current_codon_for_3_base_mutation,
+                                                                                            codon_to_aa_dict[current_codon_for_3_base_mutation],
+                                                                                            current_3_diff_codons_all_random,
+                                                                                            codon_to_aa_dict[current_3_diff_codons_all_random]))
+
+        # write into output files
+        new_seq = ''.join(input_seq_split)
+        new_seq_object = Seq(new_seq, generic_dna)
+        new_seq_object_aa = new_seq_object.translate()
+        new_seq_record = SeqRecord(new_seq_object)
+        new_seq_record_aa = SeqRecord(new_seq_object_aa)
+        new_seq_record.id = each_seq.id + ''
+        new_seq_record_aa.id = each_seq.id + '_aa'
+        new_seq_record.description = ''
+        new_seq_record_aa.description = ''
+        SeqIO.write(new_seq_record, output_handle, 'fasta')
+        SeqIO.write(new_seq_record_aa, output_aa_handle, 'fasta')
+        n += 1
+    input_aa_handle.close()
+    output_handle.close()
+    output_aa_handle.close()
+    simulate_report.close()
+
+    report_and_log(('Mutants sequences exported to file: %s' % output_seq_file_name), pwd_log_file, keep_quiet)
+
+    # run blastn between input and mutant sequences
+    report_and_log(('Calculating nc identity (by BlastN)'), pwd_log_file, keep_quiet)
+    blast_parameters_outfmt_6 = ' -evalue 1e-5 -outfmt 6 -task blastn'
+    command_blast = '%s -query %s -subject %s -out %s%s' % (blastn_exe, input_seq_file, output_seq_file, output_blast, blast_parameters_outfmt_6)
+    os.system(command_blast)
+
+    # run blastp between input and mutant sequences
+    report_and_log(('Calculating aa identity (by BlastP)'), pwd_log_file, keep_quiet)
+    blast_parameters_outfmt_6_aa = ' -evalue 1e-5 -outfmt 6 -task blastp'
+    command_blast_aa = '%s -query %s -subject %s -out %s%s' % (blastp_exe, input_aa_seq_file, output_aa_seq_file, output_blast_aa, blast_parameters_outfmt_6_aa)
+    os.system(command_blast_aa)
+
+    # put the results of blastn and blastp together
+    overall_blast_results = '%s/blast_results_overall.txt' % output_folder
+    overall_blast_results_handle = open(overall_blast_results, 'w')
+
+    blastn_results = open(output_blast)
+    obtained_mutant_list = []
+    mutant_identity_dict_nc = {}
+    for each in blastn_results:
+        each_split = each.strip().split('\t')
+        query = each_split[0]
+        subject = each_split[1]
+        identity = float(each_split[2])
+        identity = float("{0:.1f}".format(float(identity)))
+        alignment_length = int(each_split[3])
+        alignment_percent = alignment_length/sequence_length_dict_nc[query]
+        if (query in subject) and (alignment_percent > 0.8):
+            obtained_mutant_list.append(query)
+            mutant_identity_dict_nc[query] = identity
+
+    blastp_results = open(output_blast_aa)
+    mutant_identity_dict_aa = {}
+    for each_aa in blastp_results:
+        each_split_aa = each_aa.strip().split('\t')
+        query_aa = each_split_aa[0]
+        query_non_aa = query_aa[:-3]
+        subject_aa = each_split_aa[1]
+        identity_aa = float(each_split_aa[2])
+        identity_aa = float("{0:.1f}".format(float(identity_aa)))
+        alignment_length_aa = int(each_split_aa[3])
+        alignment_percent_aa = alignment_length_aa / sequence_length_dict_aa[query_aa]
+        if (query_aa in subject_aa) and (alignment_percent_aa > 0.8):
+            mutant_identity_dict_aa[query_non_aa] = identity_aa
+
+
+    overall_blast_results_handle.write('Sequence\tIden_nc\tIden_aa\n')
+    for each in all_sequence_id_list:
+        if (each in mutant_identity_dict_nc) and (each in mutant_identity_dict_aa):
+            overall_blast_results_handle.write('%s\t%s\t%s\n' % (each, mutant_identity_dict_nc[each], mutant_identity_dict_aa[each]))
+        else:
+            overall_blast_results_handle.write('%s: No similarity was found between %s and its mutant, Please try again with a different ratio or with a higher identity cutoff.\n' % (each, each))
+    overall_blast_results_handle.close()
+    os.system('cat %s %s > %s' % (overall_blast_results,simulate_report_file_temp, simulate_report_file))
+
+    report_and_log(('Mutation report exported to file: %s' % simulate_report_file_name), pwd_log_file, keep_quiet)
+
+    # get the setting of flanking sequences
+    dynamic_flanking_seqs = False
+    if ('fasta' in common_stop_sequence_l) and ('fasta' in common_stop_sequence_r):
+        dynamic_flanking_seqs = True
+
+    lf_dict = {}
+    rf_dict = {}
+    if dynamic_flanking_seqs == True:
+        lf_dict, rf_dict = get_flanking_seqs_dict(common_stop_sequence_l, common_stop_sequence_r)
+
+
+    # read insert sequences into a list
+    report_and_log(('Running random insertion'), pwd_log_file, keep_quiet)
+    report_and_log(('Dynamic_flanking_seqs set to %s' % dynamic_flanking_seqs), pwd_log_file, keep_quiet)
+
+    pwd_sequences_file = output_seq_file
+    transfers = open(pwd_transfers)
+    insertion_report_handle = open(insertion_report_file, 'w')
+    insertion_report_handle.write('recipient_genome\trecipient_contig\tbreak_position (bp)\tinserted_sequence\n')
+    for each in transfers:
+        each_split = each.strip().split(',')
+        recipient_genome_id = each_split[0]
+        insert_sequence_id_list_unorder = each_split[1:]
+        pwd_recipient_genome = '%s/%s.%s' % (pwd_recipients_folder, recipient_genome_id, recipients_genome_extension)
+        recipient_genome = SeqIO.parse(pwd_recipient_genome, 'fasta')
+        contig_id_list = []
+        contig_seq_list = []
+        contig_length_list = []
+        total_length = 0
+        for each_ctg in recipient_genome:
+            contig_id_list.append(each_ctg.id)
+            contig_seq_list.append(each_ctg.seq)
+            contig_length_list.append(len(each_ctg.seq))
+            total_length += len(each_ctg.seq)
+
+        # get the number of sequences transferred to each contig
+        total_num_of_seq_to_be_transferred = len(insert_sequence_id_list_unorder)
+        transfer_num_to_each_contig = []
+        for each_len in contig_length_list:
+            current_num = round(total_num_of_seq_to_be_transferred/total_length*each_len)
+            transfer_num_to_each_contig.append(current_num)
+
+        transfer_num_to_each_contig_corrected = transfer_num_to_each_contig[:-1]
+        transfer_num_to_each_contig_corrected.append(total_num_of_seq_to_be_transferred - sum(transfer_num_to_each_contig[:-1]))
+
+        # read insert sequences into list
+        insert_sequence_id_list = []
+        insert_sequence_seq_list = []
+        for each_gene in SeqIO.parse(pwd_sequences_file, 'fasta'):
+            if each_gene.id in insert_sequence_id_list_unorder:
+                insert_sequence_id_list.append(each_gene.id)
+                insert_sequence_seq_list.append(str(each_gene.seq))
+        # disorder the insert_sequence_id_list and insert_sequence_seq_list
+        insert_sequence_id_list_new, insert_sequence_seq_list_new = disorder_2_mapped_list(insert_sequence_id_list, insert_sequence_seq_list)
+
+        # get the id and seq of sequences to be transferred to each contig
+        list_of_id_list = []
+        list_of_seq_list = []
+        contig_number = len(contig_id_list)
+        n = 1
+        while n <= contig_number:
+            if n == 1:
+                current_id_list = insert_sequence_id_list_new[:transfer_num_to_each_contig_corrected[0]]
+                current_seq_list = insert_sequence_seq_list_new[:transfer_num_to_each_contig_corrected[0]]
+                list_of_id_list.append(current_id_list)
+                list_of_seq_list.append(current_seq_list)
+                current_id_list = []
+                current_seq_list = []
+            if n > 1:
+                current_id_list = insert_sequence_id_list_new[sum(transfer_num_to_each_contig_corrected[:n - 1]):sum(transfer_num_to_each_contig_corrected[:n])]
+                current_seq_list = insert_sequence_seq_list_new[sum(transfer_num_to_each_contig_corrected[:n - 1]):sum(transfer_num_to_each_contig_corrected[:n])]
+                list_of_id_list.append(current_id_list)
+                list_of_seq_list.append(current_seq_list)
+                current_id_list = []
+                current_seq_list = []
+            n += 1
+
+        # get intergenic_list of current genome
+        list_of_intergenic_list = []
+        list_of_intergenic_number_in_each_contig = []
+        if keep_cds == 1:
+            pwd_recipient_genome_gbk = '%s/%s.%s' % (pwd_recipients_gbk_folder, recipient_genome_id, 'gbk')
+            for ctg_record in SeqIO.parse(pwd_recipient_genome_gbk, 'genbank'):
+
+                # get cds list
+                cds_list = []
+                for feature in ctg_record.features:
+                    if feature.type == 'CDS':
+                        mystart = feature.location._start.position
+                        myend = feature.location._end.position
+                        cds_list.append((mystart,myend))
+
+                # get intergenic list and their total number
+                intergenic_list = []
+                for i, pospair in enumerate(cds_list[1:], 1):
+                    last_end = cds_list[i - 1][1]
+                    this_start = pospair[0]
+                    if this_start - last_end >= minimum_intergene_length:
+                        intergenic_list.append((last_end + 1, this_start - 1, i))
+
+                list_of_intergenic_list.append(intergenic_list)
+                list_of_intergenic_number_in_each_contig.append(len(intergenic_list))
+
+        # run insertion
+        pwd_new_seq_file = '%s/%s.%s' % (pwd_output_folder, recipient_genome_id, recipients_genome_extension)
+        new_seq_file_handle = open(pwd_new_seq_file, 'w')
+        m = 0
+        while m < contig_number:
+            recipient_ctg_nc = contig_seq_list[m]
+            insert_sequence_seq_list_new = list_of_seq_list[m]
+            insert_sequence_id_list_new = list_of_id_list[m]
+            recipient_ctg_id = contig_id_list[m]
+            recipient_ctg_intergenic_list = []
+            if keep_cds == 1:
+                recipient_ctg_intergenic_list = list_of_intergenic_list[m]
+            new_seq, for_report = get_random_insertion(keep_cds, recipient_ctg_nc, insert_sequence_seq_list_new, insert_sequence_id_list_new, dynamic_flanking_seqs, lf_dict, rf_dict, common_stop_sequence_l, common_stop_sequence_r, recipient_genome_id, recipient_ctg_id, recipient_ctg_intergenic_list)
+            new_seq_record = SeqRecord(Seq(str(new_seq), IUPAC.unambiguous_dna), id=recipient_ctg_id, description='')
+            SeqIO.write(new_seq_record, new_seq_file_handle, 'fasta')
+
+            # write in insertion report
+            for each_point in for_report:
+                insertion_report_handle.write(each_point + '\n')
+            m += 1
+        new_seq_file_handle.close()
+    insertion_report_handle.close()
+
+    # report
+    report_and_log(('Recombinants exported to folder: %s' % output_folder_name), pwd_log_file, keep_quiet)
+    report_and_log(('Insertion report exported to file: %s' % insertion_report_file_name), pwd_log_file, keep_quiet)
+
+    # delete temporary files
+    report_and_log(('Deleting temporary files'), pwd_log_file, keep_quiet)
+    os.remove(output_blast)
+    os.remove(output_blast_aa)
+    os.remove(overall_blast_results)
+    os.remove(simulate_report_file_temp)
+
+    report_and_log(('All done, thanks for using HgtSIM!'), pwd_log_file, keep_quiet)

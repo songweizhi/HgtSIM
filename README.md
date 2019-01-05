@@ -4,7 +4,7 @@
 
 Publication
 ---
-+ Song W, Steensen K, Thomas T. (2017) HgtSIM: a simulator for horizontal gene transfer (HGT) in microbial communities. PeerJ 5:e4015 https://doi.org/10.7717/peerj.4015
++ **Song W**, Steensen K, Thomas T. (2017) HgtSIM: a simulator for horizontal gene transfer (HGT) in microbial communities. PeerJ 5:e4015 https://doi.org/10.7717/peerj.4015 [PDF](https://songweizhi.github.io/assets/pdfs/Publication_2017_HgtSIM.pdf)
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
 + Affiliation: The Centre for Marine Bio-Innovation (CMB), The University of New South Wales, Sydney, Australia
 
@@ -14,15 +14,37 @@ Dependencies
 + [BioPython](https://github.com/biopython/biopython.github.io/)
 + [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 
+
+Installation
+---
+
++ HgtSIM is implemented in python3, you can installed it with:
+
+        pip3 install HgtSIM
+
++ HgtSIM requires BLAST+, you can either add it to your system path or specify full path to  "blastn" and "blastp" executables with options "-blastn" and "-blastp". 
+
+
 Change Log
 ---
+
++ To do:
+    + check Ns in provided gene sequences
+    + check whether sequences for transfer are ORFs, exit if not
+
++ 2019-01-06:
+    + HgtSIM can be installed with "pip install HgtSIM" now.
+
+
 + 2018-04-06:
-    1. combined the '-mixed', '-mini' and '-maxi' options to '-mixed min-max'.
+    + combined the '-mixed', '-mini' and '-maxi' options into one: '-mixed min-max'.
+
+
 + 2017-09-16:
-    1. added support for draft genome.
-    1. added support for dynamic flanking sequences.
-    1. added support for the 'mixed' mode.
-    1. added support for the 'keep_cds' option.
+    + add support for draft genome.
+    + add support for dynamic flanking sequences.
+    + add support for the 'mixed' mode.
+    + add support for the 'keep_cds' option.
 
 Workflow
 ---
@@ -31,11 +53,8 @@ Workflow
 Help information
 ---
 
-        # HgtSIM is implemented in python3, please use python3 instead of python.
+        HgtSIM -h
 
-        python3 HgtSIM.py -h
-
-        arguments:
           -t          sequences of genes to be transferred (multi-fasta format)
           -i          mutation level
           -d          distribution of transfers to the recipient genomes
@@ -47,9 +66,9 @@ Help information
           -mixed      randomly assign mutation levels between specified values, parameter format: min-max
           -keep_cds   insert transfers only to non-coding regions, need the annotation files (in gbk format) of recipient genomes
           -a          folder holds the annotation files (in gbk format) of recipient genomes
-          -l          the minimum length of intergenic regions to be considered for insertion
-          -blastn     path/to/blastn
-          -blastp     path/to/blastp
+          -l          minimum length of intergenic region to be considered for insertion
+          -blastn     path to blastn executable, default: blastn
+          -blastp     path to blastp executable, default: blastp
 
 
 Input files and arguments
