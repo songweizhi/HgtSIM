@@ -8,6 +8,13 @@ Publication
 + Contact: Weizhi Song (songwz03@gmail.com), Torsten Thomas(t.thomas@unsw.edu.au)
 + Affiliation: The Centre for Marine Bio-Innovation (CMB), The University of New South Wales, Sydney, Australia
 
+
+Workflow
+---
+
+![workflow](images/HgtSIM_workflow.jpg)
+
+
 Dependencies
 ---
 
@@ -15,25 +22,15 @@ Dependencies
 + [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 
 
-Installation
----
-
-+ HgtSIM is implemented in python3, you can installed it with:
-
-        pip3 install HgtSIM
-
-+ HgtSIM requires BLAST+, you can either add it to your system path or specify full path to  "blastn" and "blastp" executables with options "-blastn" and "-blastp". 
-
-
 Change Log
 ---
 
 + To do:
     + check Ns in provided gene sequences
-    + check whether sequences for transfer are ORFs, exit if not
+    + check whether provided sequences to transfer are ORFs, exit if not
 
 + 2019-01-06:
-    + HgtSIM can be installed with "pip install HgtSIM" now.
+    + HgtSIM can be installed with "pip3 install HgtSIM" now.
 
 
 + 2018-04-06:
@@ -46,9 +43,16 @@ Change Log
     + add support for the 'mixed' mode.
     + add support for the 'keep_cds' option.
 
-Workflow
+
+Installation
 ---
-![workflow](images/HgtSIM_workflow.jpg)
+
++ HgtSIM is implemented in python3, you can install it with:
+
+        pip3 install HgtSIM
+
++ HgtSIM requires BLAST+, you can either add it to your system path or specify full path to  "blastn" and "blastp" executables with options "-blastn" and "-blastp". 
+
 
 Help information
 ---
