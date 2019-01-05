@@ -84,10 +84,10 @@ Input files and arguments
 HgtSIM will randomly select a value between user specified minimum and maximum mutation levels to alter each gene transfer.
 
         # with fixed mutation level (e.g. 10%).
-        python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -i 10
+        HgtSIM -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -i 10
 
         # with 'mixed' mode (e.g. 5-25%)
-        python3 HgtSIM.py -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -mixed 5-25
+        HgtSIM -t genes.fasta -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -mixed 5-25
 
 1. The ratio of mutation categories (separated with dash). The default setting is '1-0-1-1'. Please refer to the publication (http://dx.doi.org/10.7717/peerj.4015) or the figure below for its setting.
 
@@ -105,13 +105,13 @@ HgtSIM will randomly select a value between user specified minimum and maximum m
 1. The flanking sequences to be added to the end of gene transfers. Can be specified with '-lf' and '-rf', the default value is None.
 
         # introduce gene transfers without adding flanking sequences
-        python3 HgtSIM.py -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna
+        HgtSIM -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna
 
         # or, add same pair of flanking sequences (e.g. 'TAGATGAGTGATTAGTTAGTTA') to all gene transfers
-        python3 HgtSIM.py -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -lf TAGATGAGTGATTAGTTAGTTA -rf TAGATGAGTGATTAGTTAGTTA
+        HgtSIM -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -lf TAGATGAGTGATTAGTTAGTTA -rf TAGATGAGTGATTAGTTAGTTA
 
         # or, add flanking sequences dynamically to the two ends of each gene transfer
-        python3 HgtSIM.py -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -lf lf.fasta -rf rf.fasta
+        HgtSIM -t genes.fasta -i 10 -d distribution.txt -f input_genomes -r 1-0-1-1 -x fna -lf lf.fasta -rf rf.fasta
 
     if you want to add flanking sequences dynamically to the gene transfers, you can specify the left and right side sequences in two multi-fasta files.
     The IDs of the flanking sequences need to be exactly the same to their corresponding gene transfers.
