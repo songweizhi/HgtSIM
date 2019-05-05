@@ -1,6 +1,11 @@
 
 ![logo](images/HgtSIM_logo.jpg)
 
+[![pypi  licence  ](https://img.shields.io/pypi/l/HgtSIM.svg)](https://opensource.org/licenses/gpl-3.0.html)
+[![pypi  version  ](https://img.shields.io/pypi/v/HgtSIM.svg)](https://pypi.python.org/pypi/HgtSIM) 
+[![pypi  download ](https://img.shields.io/pypi/dm/HgtSIM.svg)](https://pypi.python.org/pypi/HgtSIM)
+[![DOI            ](https://img.shields.io/static/v1.svg?label=DOI&message=10.7717/peerj.4015&color=orange)](https://doi.org/10.7717/peerj.4015)
+
 
 Publication
 ---
